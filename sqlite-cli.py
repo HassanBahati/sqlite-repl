@@ -3,6 +3,7 @@ from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.lexers import PygmentsLexer
 from pygments.lexers.sql import SqlLexer
 
+# sql_completer(object of possible keywords) object can be passed to PromptSession or Prompt 
 sql_completer = WordCompleter([
     'abort', 'action', 'add', 'after', 'all', 'alter', 'analyze', 'and',
     'as', 'asc', 'attach', 'autoincrement', 'before', 'begin', 'between',
