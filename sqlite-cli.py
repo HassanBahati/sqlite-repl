@@ -1,19 +1,25 @@
+from inspect import Parameter
 from prompt_toolkit import PromptSession
+from prompt_toolkit.lexers import PygmentsLexer
+from pygments.lexers.sql import SqlLexer
+
+# highlight sql statements
+# use pygments library for coloring 
+# lexer Parameter lets us to set the syntax  lexer 
+# sqlLexer for highlighting 
 
 def main():
-    session = PromptSession()
+    session = PromptSession(lexer=PygmentsLexer(SqlLexer))
 
     while True:
-        # prompt user for text input 
         try:
             text = session.prompt('> ')
-        # continue to next line and get more user input when ctrlC has been pressed
         except KeyboardInterrupt:
             continue
-        # exit the terminal when ctrlD has been pressed
         except EOFError:
             break
         else:
-            print('Goodbye!')
+            print('You entered: ', text)
+        print('Goodbye!')
 
 main()
