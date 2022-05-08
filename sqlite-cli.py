@@ -2,6 +2,7 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.lexers import PygmentsLexer
 from pygments.lexers.sql import SqlLexer
+from prompt_toolkit.styles import Style
 
 # sql_completer(object of possible keywords) object can be passed to PromptSession or Prompt 
 sql_completer = WordCompleter([
@@ -25,8 +26,16 @@ sql_completer = WordCompleter([
     'vacuum', 'values', 'view', 'virtual', 'when', 'where', 'with',
     'without'], ignore_case=True)
 
+# styles for the auto complete 
+style = Style.from_dict({
+    'completion-menu.completion': 'bg:#008888 #ffffff',
+    'completion-menu.completion.current': 'bg:#00aaaa #000000',
+    'scrollbar.background': 'bg:#88aaaa',
+    'scrollbar.button': 'bg:#222222',
+})
+
 def main():
-    session= PromptSession(lexer=PygmentsLexer(SqlLexer), completer=sql_completer)
+    session= PromptSession(lexer=PygmentsLexer(SqlLexer), completer=sql_completer, style=style)
 
     while True:
         try:
