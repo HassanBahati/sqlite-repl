@@ -3,6 +3,8 @@ from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.lexers import PygmentsLexer
 from pygments.lexers.sql import SqlLexer
 from prompt_toolkit.styles import Style
+import sys
+import sqlite3 
 
 # sql_completer(object of possible keywords) object can be passed to PromptSession or Prompt 
 sql_completer = WordCompleter([
@@ -34,19 +36,34 @@ style = Style.from_dict({
     'scrollbar.button': 'bg:#222222',
 })
 
-def main():
+def main(database):
+    # hook to sql database 
+    connection = sqlite3.connect(database)
+
     session= PromptSession(lexer=PygmentsLexer(SqlLexer), completer=sql_completer, style=style)
 
     while True:
         try:
             text = session.prompt('> ')
-        except KeyboardInterrupt:
-            continue
+        except KeyboardInterrupt:  
+            continue   #ctrl-C pressed. try again 
         except EOFError:
-            break 
-        else:
-            print('Your entered: ', text)
-        print('Goodbye!')
+            break      #ctrl-D pressed. Exit 
+        
+        #linking up sqql database
+        with connection:
+            try:
+                messages = connection.execute(text)
+            except Exception as e:
+                print(repr(e))
+            else:
+                for message in messages:
+                    print(message)
     
 
-main()
+if __name__  == '__main__':
+    if len(sys.argv) < 2:
+        db = ':memory:'
+    else:
+        db = sys.argv[1]
+    main(db) 
